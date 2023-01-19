@@ -32,7 +32,6 @@ import com.ublox.BLE.bluetooth.BluetoothCentral;
 import com.ublox.BLE.bluetooth.BluetoothDevice;
 import com.ublox.BLE.bluetooth.BluetoothPeripheral;
 import com.ublox.BLE.bluetooth.BluetoothScanner;
-import com.ublox.BLE.fragments.KeyEntryFragment;
 import com.ublox.BLE.utils.GattAttributes;
 
 import java.util.ArrayList;
@@ -48,7 +47,6 @@ import static android.bluetooth.BluetoothDevice.BOND_BONDED;
 import static android.bluetooth.BluetoothDevice.BOND_BONDING;
 import static android.bluetooth.BluetoothDevice.BOND_NONE;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static no.nordicsemi.android.meshprovisioner.utils.SecureUtils.calculateK3;
 
 public class DevicesActivity extends Activity implements AdapterView.OnItemClickListener, BluetoothCentral.Delegate {
     /*
@@ -67,7 +65,7 @@ public class DevicesActivity extends Activity implements AdapterView.OnItemClick
     private LeDeviceListAdapter mLeDeviceListAdapter;
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothCentral scanner;
-    private byte[] currentNetworkId = calculateK3(DEFAULT_NET_KEY);
+    //private byte[] currentNetworkId = calculateK3(DEFAULT_NET_KEY);
     private byte[] currentNetKey = DEFAULT_NET_KEY;
     private byte[] currentAppKey = DEFAULT_APP_KEY;
 
@@ -134,9 +132,9 @@ public class DevicesActivity extends Activity implements AdapterView.OnItemClick
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_devices, menu);
-        if (DEFINE_MESH_ACTIVE) {
+        /*if (DEFINE_MESH_ACTIVE) {
             menu.findItem(R.id.menu_mesh_keys).setVisible(true);
-        }
+        }*/
         if (scanner.getState() != BluetoothScanner.State.SCANNING) {
             menu.findItem(R.id.menu_stop).setVisible(false);
             menu.findItem(R.id.menu_scan).setVisible(true);
@@ -169,9 +167,9 @@ public class DevicesActivity extends Activity implements AdapterView.OnItemClick
                 Intent aboutIntent = new Intent(this, AboutActivity.class);
                 startActivity(aboutIntent);
                 break;
-            case R.id.menu_mesh_keys:
+            /*case R.id.menu_mesh_keys:
                 showMeshDialog(null);
-                break;
+                break;*/
         }
         return true;
     }
@@ -230,7 +228,7 @@ public class DevicesActivity extends Activity implements AdapterView.OnItemClick
         invalidateOptionsMenu();
     }
 
-    private void showMeshDialog(BluetoothPeripheral andJoin) {
+    /*private void showMeshDialog(BluetoothPeripheral andJoin) {
         if (!DEFINE_MESH_ACTIVE) return;
 
         boolean doJoin = andJoin != null;
@@ -253,20 +251,20 @@ public class DevicesActivity extends Activity implements AdapterView.OnItemClick
             joinMesh(andJoin);
         });
         dialog.show(getFragmentManager(), "KeyEntry");
-    }
+    }*/
 
-    private boolean hasMatchingKey(BluetoothPeripheral peripheral) {
+    /*private boolean hasMatchingKey(BluetoothPeripheral peripheral) {
         byte[] serviceData = peripheral.serviceDataFor(MESH_SERVICE);
         return serviceData.length > 8 && serviceData[0] == 0 && Arrays.equals(currentNetworkId, Arrays.copyOfRange(serviceData, 1, serviceData.length));
-    }
+    }*/
 
-    private void joinMesh(BluetoothPeripheral peripheral) {
+    /*private void joinMesh(BluetoothPeripheral peripheral) {
         Intent intent = new Intent(this, MeshActivity.class);
         intent.putExtra(EXTRA_DEVICE, peripheral);
         intent.putExtra(EXTRA_NET_KEY, currentNetKey);
         intent.putExtra(EXTRA_APP_KEY, currentAppKey);
         startActivity(intent);
-    }
+    }*/
 
     @TargetApi(23)
     private void verifyPermissionAndScan() {
@@ -310,9 +308,9 @@ public class DevicesActivity extends Activity implements AdapterView.OnItemClick
             scanner.stop();
             BluetoothPeripheral device = mLeDeviceListAdapter.getDevice(position);
 
-            if (DEFINE_MESH_ACTIVE && device.advertisedService(MESH_SERVICE)) {
+            /*if (DEFINE_MESH_ACTIVE && device.advertisedService(MESH_SERVICE)) {
                 showMeshDialog(device);
-            } else {
+            } else*/ {
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra(EXTRA_DEVICE, ((BluetoothDevice) device).toUbloxDevice());
                 startActivity(intent);

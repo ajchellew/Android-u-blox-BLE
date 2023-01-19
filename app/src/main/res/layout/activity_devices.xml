@@ -29,7 +29,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:text="@string/checkBoxSpsText" />
+            android:text="@string/checkBoxSpsText"
+            android:checked="true" />
 
         <CheckBox
             android:id="@+id/checkBoxMesh"

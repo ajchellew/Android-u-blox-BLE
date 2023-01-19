@@ -22,10 +22,10 @@
         android:title="About"
         android:icon="@drawable/info"
         android:showAsAction="always"/>
-    <item
+    <!--<item
         android:id="@+id/menu_mesh_keys"
         android:orderInCategory="102"
         android:showAsAction="always|withText"
         android:title="🔑"
-        android:visible="false" />
+        android:visible="false" />-->
 </menu>
