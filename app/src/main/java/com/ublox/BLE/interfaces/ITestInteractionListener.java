@@ -1,7 +1,7 @@
 package com.ublox.BLE.interfaces;
 
 
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 
 import com.ublox.BLE.utils.PhyMode;
 

@@ -1,9 +1,9 @@
 package com.ublox.BLE;
 
 import android.app.Activity;
-import android.support.test.espresso.ViewAssertion;
-import android.support.test.espresso.ViewInteraction;
-import android.support.test.espresso.matcher.BoundedMatcher;
+import androidx.test.espresso.ViewAssertion;
+import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.matcher.BoundedMatcher;
 
 import com.ublox.BLE.bluetooth.BluetoothPeripheral;
 
@@ -12,9 +12,9 @@ import org.hamcrest.TypeSafeMatcher;
 
 import java.util.Map;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
 
 public class EspressoExtensions {

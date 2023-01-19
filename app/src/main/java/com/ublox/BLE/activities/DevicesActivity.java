@@ -8,8 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -41,6 +42,8 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.BLUETOOTH_CONNECT;
+import static android.Manifest.permission.BLUETOOTH_SCAN;
 import static android.bluetooth.BluetoothDevice.BOND_BONDED;
 import static android.bluetooth.BluetoothDevice.BOND_BONDING;
 import static android.bluetooth.BluetoothDevice.BOND_NONE;
@@ -267,10 +270,25 @@ public class DevicesActivity extends Activity implements AdapterView.OnItemClick
 
     @TargetApi(23)
     private void verifyPermissionAndScan() {
-        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PERMISSION_GRANTED) {
-            scanner.scan(new ArrayList<>());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            boolean scanGranted = ContextCompat.checkSelfPermission(this, BLUETOOTH_SCAN) == PERMISSION_GRANTED;
+            boolean connectGranted = ContextCompat.checkSelfPermission(this, BLUETOOTH_CONNECT) == PERMISSION_GRANTED;
+            if (scanGranted && connectGranted) {
+                scanner.scan(new ArrayList<>());
+            } else {
+                String[] permissions = new String[] { BLUETOOTH_SCAN, BLUETOOTH_CONNECT };
+                if (scanGranted)
+                    permissions = new String[] { BLUETOOTH_CONNECT };
+                else if (connectGranted)
+                    permissions = new String[] { BLUETOOTH_SCAN };
+                requestPermissions(permissions, LOCATION_REQUEST);
+            }
         } else {
-            requestPermissions(new String[] {ACCESS_FINE_LOCATION}, LOCATION_REQUEST);
+            if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PERMISSION_GRANTED) {
+                scanner.scan(new ArrayList<>());
+            } else {
+                requestPermissions(new String[] {ACCESS_FINE_LOCATION}, LOCATION_REQUEST);
+            }
         }
     }
 
@@ -281,7 +299,8 @@ public class DevicesActivity extends Activity implements AdapterView.OnItemClick
         if (grantResults.length > 0 && grantResults[0] == PERMISSION_GRANTED) {
             scanner.scan(new ArrayList<>());
         } else {
-            Toast.makeText(this, R.string.location_permission_toast, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ?
+                    R.string.bluetooth_scan_permission_toast : R.string.location_permission_toast, Toast.LENGTH_LONG).show();
         }
     }
 
